@@ -1,5 +1,23 @@
 pcall(require, "luarocks.loader")
 
+-- HOME VARIABLE
+home_var = os.getenv("HOME")
+
+-- USER PREFERENCES
+user_likes = {
+    -- aplications
+    term = "kitty",
+    editor = "geany" .. "gedit",
+    code = "vscode",
+    web = "firefox",
+    -- music       = "alacritty --class 'music' --config-file " .. home_var .. "/.config/alacritty/ncmpcpp.yml -e ncmpcpp ",
+    files = "nemo",
+
+    -- profile
+    username = os.getenv("USER"):gsub("^%l", string.upper),
+    userdesc = ""
+}
+
 -- Standard awesome library
 local gears = require("gears")
 local awful = require("awful")
@@ -20,6 +38,10 @@ require("awful.hotkeys_popup.keys")
 local appmenu = require("appmenu")
 -- Update appmenu each time new app installed
 awful.spawn.with_shell("awesome-appmenu")
+
+-- MODULES
+local theme = require("themes")
+beautiful.init(theme)
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -65,7 +87,7 @@ myawesomemenu = {
     {"manual", terminal .. " -e man awesome"},
     {"edit config", editor_cmd .. " " .. awesome.conffile},
     {"restart", awesome.restart},
-    {"quit", function() awesome.quit() end},
+    {"quit", function() awesome.quit() end}
 }
 
 mymainmenu = awful.menu({items = {{"awesome", myawesomemenu, beautiful.awesome_icon},
@@ -127,14 +149,14 @@ local tasklist_buttons = gears.table.join(
 
 local function set_wallpaper(s)
     -- -- Wallpaper
-    -- if beautiful.wallpaper then
-    --     local wallpaper = beautiful.wallpaper
-    --     -- If wallpaper is a function, call it with the screen
-    --     if type(wallpaper) == "function" then
-    --         wallpaper = wallpaper(s)
-    --     end
-    --     gears.wallpaper.maximized(wallpaper, s, true)
-    -- end
+    if beautiful.wallpaper then
+        local wallpaper = beautiful.wallpaper
+        -- If wallpaper is a function, call it with the screen
+        if type(wallpaper) == "function" then
+            wallpaper = wallpaper(s)
+        end
+        gears.wallpaper.maximized(wallpaper, s, true)
+    end
 end
 
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
@@ -156,7 +178,8 @@ awful.screen.connect_for_each_screen(function(s)
         awful.button({}, 1, function () awful.layout.inc(1) end),
         awful.button({}, 3, function () awful.layout.inc(-1) end),
         awful.button({}, 4, function () awful.layout.inc(1) end),
-    awful.button({}, 5, function () awful.layout.inc(-1) end)))
+        awful.button({}, 5, function () awful.layout.inc(-1) end))
+    )
     -- Create a taglist widget
     s.mytaglist = awful.widget.taglist {
         screen = s,
@@ -198,7 +221,8 @@ end)
 root.buttons(gears.table.join(
     awful.button({}, 3, function () mymainmenu:toggle() end),
     awful.button({}, 4, awful.tag.viewnext),
-awful.button({}, 5, awful.tag.viewprev)))
+    awful.button({}, 5, awful.tag.viewprev))
+)
 -- }}}
 
 -- {{{ Key bindings
@@ -529,24 +553,3 @@ end)
 --client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 --client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
-
--- HOME VARIABLE
-home_var = os.getenv("HOME")
-
--- USER PREFERENCES
-user_likes = {
-    -- aplications
-    term = "kitty",
-    editor = "geany" .. "gedit",
-    code = "vscode",
-    web = "firefox",
-    -- music       = "alacritty --class 'music' --config-file " .. home_var .. "/.config/alacritty/ncmpcpp.yml -e ncmpcpp ",
-    files = "nemo",
-
-    -- profile
-    username = os.getenv("USER"):gsub("^%l", string.upper),
-    userdesc = ""
-}
-
--- MODULES
-require("themes")

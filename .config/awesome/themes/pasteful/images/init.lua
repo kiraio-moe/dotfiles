@@ -1,4 +1,4 @@
-local directory = home_var .. ".config/awesome/themes/pasteful/images/"
+local directory = require("gears").filesystem.get_configuration_dir() .. "themes/pasteful/images/"
 local ui_vars = require("themes.pasteful.ui_vars")
 
 return {
